@@ -142,5 +142,5 @@ class AppService extends Service
 
     }
     ```
-    看来官方已经想到了这种场景，完美契合，又变的优雅起来了
+    看来官方已经想到了这种场景，完美契合，又变的优雅起来了。其实官方文档有说明，详见[中间件变量](https://static.kancloud.cn/manual/thinkphp6_0/1037519#_217)
 
