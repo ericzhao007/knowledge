@@ -5,7 +5,7 @@
 众所周知，tp有trace调试，非常方便，但是在项目中使用却遇到了一些问题。
 首先项目代码中并不包含`topthink/think-trace`库，其次我们的`vendor`是加入到版本控制中的，如果引入可能会导致trace库传到线上，那有没有办法无侵入式的引入`topthink/think-trace`呢，这里就要使用黑魔法了
 
-题主想到了php配置项`auto_prepend_file`，可以指定预先执行的php，但是我们只希望当前项目引入，怎么办？
+作者想到了php配置项`auto_prepend_file`，可以指定预先执行的php，但是我们只希望当前项目引入，怎么办？
 别急，还可以通过nginx的fastcgi_param去指定，只需在你网站配置文件中添加一行：
 ```
 fastcgi_param PHP_VALUE "auto_prepend_file=/var/www/fast_cgi_pare/index.php";
@@ -63,10 +63,10 @@ class AppService extends Service
 - 后台校验写在了父级控制器中，并且强制exit，这也不够优雅
 
 针对以上问题我们开始进行改造
-1. 在构造中new这很常见，题主老东家也是这么玩的，但是带来的问题就是有些类可能用不到也实例化了，非常浪费资源。其次，题主发现在tp中new一个model的时候会直接查表`SHOW FULL COLUMNS FROM`，这直接影响了性能，除非不在构造里new，但这样每个方法都要new，万一互相调用会造成更多不必要的损耗。   
+1. 在构造中new这很常见，作者老东家也是这么玩的，但是带来的问题就是有些类可能用不到也实例化了，非常浪费资源。其次，作者发现在tp中new一个model的时候会直接查表`SHOW FULL COLUMNS FROM`，这直接影响了性能，除非不在构造里new，但这样每个方法都要new，万一互相调用会造成更多不必要的损耗。   
 这里容器就该登场了，是的，thinkphp也学会了容器，并且一个函数 `app()`就可以获取到容器实例，这样就解决了重复new的问题。
 接下来该解决`SHOW FULL COLUMNS FROM`的问题了，前面讲new的时候就会查询，不管是否用到。ps: tp应该是有对表结构的缓存的;  
-这里题主想到是否可以使用一个中间类，在app方法返回的是中间类，而在调用方法的时候再进行实例化，当然可以。我们对app方法进行包装：   
+这里作者想到是否可以使用一个中间类，在app方法返回的是中间类，而在调用方法的时候再进行实例化，当然可以。我们对app方法进行包装：   
     ```php
     <?php
     // ...
