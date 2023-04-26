@@ -240,7 +240,7 @@ $line = [];
 foreach($arr as $key => $item){
     $total_counters[$key] = count($item) - 1; // 减1因为我们是从0开始数的
     $current_counters[$key] = 0;
-    $line[$key] = 0;
+    $line[$key] = $item[0];
 }
 $lines = [$line];
 while(true){
@@ -271,6 +271,7 @@ while(true){
     }
     $lines[] = $line;            
 }
+var_dump($lines);
 ```
 
 ### 总结
